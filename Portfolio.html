@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--Fix the position of navbar's humberger in mobile phones that is getting out of the screen, we have to scroll it to left side to view humberger fix it.-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piyush Pratap Verma | Front-End Developer</title>
+    <!-- Website Icon-->
+    <link rel="icon" href="Moon_knight-removebg-preview.png" type="image/png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Tailwind CSS (optional) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            padding-bottom: 5%;
+        }
+
+        /* Header Styles */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 0 1rem;
+        }
+
+        .navbar .container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            #hamburger-btn {
+                margin-left: auto;
+                margin-right: 0;
+                padding-right: 0;
+                position: relative;
+                right: 0;
+            }
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+        }
+
+        .particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        /* Skill Cards */
+        .skill-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .skill-card:hover::before {
+            opacity: 0.1;
+        }
+
+        /* Team Section */
+        .team-member {
+            perspective: 1000px;
+        }
+
+        .team-card {
+            transition: transform 0.6s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: rotateY(15deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Contact Form */
+        .contact-form .form-control {
+            transition: all 0.3s ease;
+        }
+
+        .contact-form .form-control:focus {
+            box-shadow: none;
+            border-color: var(--primary);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-bg {
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            }
+
+            .team-card {
+                margin-bottom: 30px;
+            }
+
+            #hamburger-btn {
+                margin-left: auto;
+                padding-right: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-primary {
+            background-color: var(--primary);
+        }
+
+        .bg-dark {
+            background-color: var(--dark);
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar bg-transparent py-4">
+        <div class="container mx-auto px-6 flex items-center">
+            <!-- Hamburger Button (left side, always visible on mobile) -->
+            <button id="hamburger-btn"
+                class="md:hidden text-white focus:outline-none flex items-center justify-center mr-4">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+            <a href="#" class="text-2xl font-bold text-white">Piyush<span class="text-accent">.</span></a>
+            <div class="flex-1 flex justify-end items-center">
+                <!-- Desktop Menu -->
+                <div id="nav-links" class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-white hover:text-accent transition">Home</a>
+                    <a href="#skills" class="text-white hover:text-accent transition">Skills</a>
+                    <a href="#portfolio" class="text-white hover:text-accent transition">Portfolio</a>
+                    <a href="#team" class="text-white hover:text-accent transition">Team</a>
+                    <a href="#about" class="text-white hover:text-accent transition">About</a>
+                    <a href="#contact" class="text-white hover:text-accent transition">Contact</a>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden flex-col bg-dark w-full px-6 py-4 space-y-4">
+            <a href="#home" class="text-white hover:text-accent transition block">Home</a>
+            <a href="#skills" class="text-white hover:text-accent transition block">Skills</a>
+            <a href="#portfolio" class="text-white hover:text-accent transition block">Portfolio</a>
+            <a href="#team" class="text-white hover:text-accent transition block">Team</a>
+            <a href="#about" class="text-white hover:text-accent transition block">About</a>
+            <a href="#contact" class="text-white hover:text-accent transition block">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero flex items-center justify-center relative">
+        <div class="hero-bg"></div>
+        <div id="particles-js" class="particles-js"></div>
+        <div class="container mx-auto px-6 z-10 text-center">
+            <div data-aos="fade-up" data-aos-duration="800">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">Piyush Pratap Verma</h1>
+                <h2 class="text-xl md:text-2xl font-medium text-white opacity-90 mb-8">Front-End Developer</h2>
+                <div class="flex justify-center space-x-4 mb-12">
+                    <a href="#contact"
+                        class="px-8 py-3 bg-accent text-white rounded-full font-medium hover:bg-opacity-90 transition">Hire
+                        Me</a>
+                    <a href="#portfolio"
+                        class="px-8 py-3 bg-transparent border-2 border-white text-white rounded-full font-medium hover:bg-white hover:text-black transition">My
+                        Work</a>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <a href="#about" class="text-white flex flex-col items-center animate-bounce">
+                    <span>Scroll Down</span>
+                    <i class="fas fa-chevron-down mt-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My <span class="text-primary">Skills</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">I specialize in front-end development with expertise in these
+                    technologies</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <!-- Skill 1 -->
+                <div class="skill-card p-8 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-5xl text-primary mb-4">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">HTML5</h3>
+                    <p class="text-gray-600">Semantic markup, accessibility, and modern HTML features.</p>
+                </div>
+
+                <!-- Skill 2 -->
+                <div class="skill-card p-8 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-5xl text-primary mb-4">
+                        <i class="fab fa-css3-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">CSS3</h3>
+                    <p class="text-gray-600">Responsive design, animations, Flexbox, Grid, and CSS architecture.</p>
+                </div>
+
+                <!-- Skill 3 -->
+                <div class="skill-card p-8 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-5xl text-primary mb-4">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">JavaScript</h3>
+                    <p class="text-gray-600">Modern ES6+, DOM manipulation, async programming.</p>
+                </div>
+
+                <!-- Skill 4 -->
+                <div class="skill-card p-8 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-5xl text-primary mb-4">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Python</h3>
+                    <p class="text-gray-600">Scripting, web development with Django/Flask, automation.</p>
+                </div>
+
+                <!-- Skill 5 -->
+                <div class="skill-card p-8 text-center" data-aos="fade-up" data-aos-delay="500">
+                    <div class="text-5xl text-primary mb-4">
+                        <i class="fab fa-php"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">PHP</h3>
+                    <p class="text-gray-600">Backend development with Laravel, WordPress customization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Featured <span class="text-primary">Work</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">A selection of my recent projects showcasing my skills</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="portfolio-item overflow-hidden rounded-xl shadow-lg bg-white flex flex-col"
+                    data-aos="zoom-in">
+                    <div class="relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
+                            alt="Modern e-commerce website"
+                            class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="#" class="px-6 py-3 bg-accent text-white rounded-full font-semibold shadow-lg">View
+                                Project</a>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-xl font-bold mb-2">E-Commerce Website</h3>
+                        <p class="text-gray-600 mb-4 flex-1">Modern e-commerce site with real-time analytics and product
+                            listings.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">React</span>
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">Chart.js</span>
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">Tailwind</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div class="portfolio-item overflow-hidden rounded-xl shadow-lg bg-white flex flex-col"
+                    data-aos="zoom-in" data-aos-delay="200">
+                    <div class="relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80"
+                            alt="VCA Website"
+                            class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="#" class="px-6 py-3 bg-accent text-white rounded-full font-semibold shadow-lg">View
+                                Project</a>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-xl font-bold mb-2">VCA Website</h3>
+                        <p class="text-gray-600 mb-4 flex-1">Official website for Volcanic Computer Academy with booking
+                            and information system.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">Vue.js</span>
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">PHP</span>
+                            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full">MySQL</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Removed Task Management App -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My <span class="text-primary">Team</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">My talented student collaborators</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="team-member" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-card bg-white rounded-lg overflow-hidden shadow-lg text-center p-6">
+                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary mb-4">
+                            <img src="Harshit.jpeg"
+                                alt="Harshit - A creative professional working on laptop in a cozy workspace with plants"
+                                class="w-full h-full object-cover" />
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Harshit</h3>
+                        <p class="text-accent font-medium mb-4">Content Creator & Database Expert</p>
+                        <p class="text-gray-600 mb-4">Creates engaging content that resonates with our audience and
+                            manages databases efficiently.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-member" data-aos="fade-up" data-aos-delay="300">
+                    <div class="team-card bg-white rounded-lg overflow-hidden shadow-lg text-center p-6">
+                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary mb-4">
+                            <img src="Roshan.jpeg"
+                                alt="Roshan Kumar Rana - UI designer sketching wireframes with digital tablet in a modern office"
+                                class="w-full h-full object-cover" />
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Roshan Kumar Rana</h3>
+                        <p class="text-accent font-medium mb-4">UI Designer</p>
+                        <p class="text-gray-600 mb-4">Crafts beautiful and intuitive user interfaces.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-member" data-aos="fade-up" data-aos-delay="500">
+                    <div class="team-card bg-white rounded-lg overflow-hidden shadow-lg text-center p-6">
+                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary mb-4">
+                            <img src="Rishav.jpeg"
+                                alt="Rishav - Young innovator brainstorming ideas in a collaborative workspace with whiteboards"
+                                class="w-full h-full object-cover" />
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Rishav</h3>
+                        <p class="text-accent font-medium mb-4">Ideas</p>
+                        <p class="text-gray-600 mb-4">Brings fresh perspectives and innovative solutions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-primary text-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0 md:pr-12" data-aos="fade-right">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">About <span class="text-accent">Me</span></h2>
+                    <p class="mb-6 text-white opacity-90">
+                        I'm Piyush Pratap Verma, a student and passionate Front-End Developer. I enjoy building
+                        beautiful and functional websites and web apps, and I have a solid understanding of basic
+                        backend operations.
+                    </p>
+                    <p class="mb-6 text-white opacity-90">
+                        As a member of VCA (Volcanic Computer Academy), I work with other students to learn, experiment,
+                        and create digital projects together. We focus on improving our skills and supporting each other
+                        as we grow.
+                    </p>
+                    <p class="mb-8 text-white opacity-90">
+                        I pay close attention to detail and always aim for a great user experience. My goal is to write
+                        clean code and design interfaces that are easy to use and meet real needs, while continuing to
+                        learn and develop as a student developer.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center" data-aos="zoom-in"
+                            data-aos-delay="100">
+                            <div class="text-2xl font-bold">20+</div>
+                            <div class="text-sm">Projects Completed</div>
+                        </div>
+                        <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center" data-aos="zoom-in"
+                            data-aos-delay="300">
+                            <div class="text-2xl font-bold">3</div>
+                            <div class="text-sm">Team Members</div>
+                        </div>
+                        <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center" data-aos="zoom-in"
+                            data-aos-delay="500">
+                            <div class="text-2xl font-bold">100%</div>
+                            <div class="text-sm">Client Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2" data-aos="fade-left">
+                    <div class="relative flex justify-center items-center"></div>
+                    <div
+                        class="w-40 h-40 md:w-80 md:h-80 bg-gray-200 rounded-full overflow-hidden flex justify-center items-center mx-auto">
+                        <img src="Piyush.jpeg"
+                            alt="Piyush Pratap Verma working in a modern office space with dual monitors, writing code on a sleek laptop"
+                            class="w-full h-full object-cover object-center" />
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">VCA</h3>
+                    <p class="text-white">Volcanic Computer Academy</p>
+                    <p class="text-white text-sm mt-2">Team of aspiring developers & designers</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In <span class="text-primary">Touch</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Have a project in mind or want to discuss potential
+                    opportunities?</p>
+            </div>
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-12 md:mb-0 md:pr-8">
+                    <div class="bg-white rounded-lg shadow-lg p-8 h-full" data-aos="fade-right">
+                        <h3 class="text-xl font-bold mb-6">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="text-primary text-xl mr-4 mt-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Location</h4>
+                                    <p class="text-gray-600">Giridih, Jharkhand, India</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-primary text-xl mr-4 mt-1">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Email</h4>
+                                    <p class="text-gray-600">elixircoder@outlook.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-primary text-xl mr-4 mt-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <h4 class="font-bold mb-4">Follow Me</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://github.com/Piyush-67"
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2" data-aos="fade-left">
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col justify-center items-start h-full">
+                        <h3 class="text-xl font-bold mb-6">Contact Me Directly</h3>
+                        <div class="mb-4">
+                            <span class="font-medium text-gray-700">elixircoder@outlook.com</span>
+                            <a href="mailto:elixircoder@outlook.com"
+                                class="text-primary ml-2 hover:underline">elixircoder@outlook.com</a>
+                        </div>
+                        <div class="mb-4">
+                            <span class="font-medium text-gray-700">GitHub:</span>
+                            <a href="https://github.com/Piyush-67" target="_blank"
+                                class="text-primary ml-2 hover:underline">https://github.com/Piyush-67</a>
+                        </div>
+                        <div class="mb-4">
+                            <span class="font-medium text-gray-700">Workplace E-Mail:</span>
+                            <a href="groupcoders11@gamil.com"
+                                class="text-primary ml-2 hover:underline">groupcoders11@gamil.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-dark text-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-2xl font-bold">Piyush<span class="text-accent">.</span></a>
+                    <p class="mt-2 text-gray-400">Student & Front-End Developer</p>
+                </div>
+                <div>
+                    <p class="text-gray-400">&copy; 2024 Piyush Pratap Verma. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS animation
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Navbar background change on scroll
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        $('a[href*="#"]').on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate(
+                {
+                    scrollTop: $($(this).attr('href')).offset().top - 70,
+                },
+                500,
+                'linear'
+            );
+        });
+
+        // Hamburger menu toggle
+        $('#hamburger-btn').click(function () {
+            $('#mobile-menu').slideToggle(200);
+        });
+
+        // Hide mobile menu on resize to desktop
+        $(window).resize(function () {
+            if ($(window).width() >= 768) {
+                $('#mobile-menu').hide();
+            }
+        });
+
+        // Particles.js configuration
+        document.addEventListener('DOMContentLoaded', function () {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+
+        // Form submission
+        $('.contact-form').submit(function (e) {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+            this.reset();
+        });
+    </script>
+</body>
+
+</html>
